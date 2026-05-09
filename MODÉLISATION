@@ -1,0 +1,231 @@
+# 📐 Modélisation du Data Warehouse — Mexora Analytics
+
+> Document de justification des choix architecturaux du Data Warehouse Mexora.
+
+---
+
+## 1. Analyse des Besoins Décisionnels (Top-Down)
+
+### Requêtes-types formalisées
+
+```
+Requête R1 :
+  Analyser   → le chiffre d'affaires (montant TTC)
+  En fonction de → la région, la catégorie de produit, le trimestre
+  Pour → les commandes avec statut "livré" uniquement
+
+Requête R2 :
+  Analyser   → la quantité vendue et le montant TTC
+  En fonction de → le produit, le mois, le segment client
+  Pour → l'année 2024
+
+Requête R3 :
+  Analyser   → le panier moyen (montant TTC / nb commandes)
+  En fonction de → le segment client (Gold/Silver/Bronze)
+  Pour → les clients actifs des 12 derniers mois
+
+Requête R4 :
+  Analyser   → le taux de retour (nb retours / nb total commandes × 100)
+  En fonction de → la catégorie de produit, la région
+  Pour → toutes les commandes (statut livré + retourné)
+
+Requête R5 :
+  Analyser   → le volume vendu et le CA moyen journalier
+  En fonction de → la période (Ramadan vs hors Ramadan), la catégorie
+  Pour → les ventes d'alimentation sur 2022-2024
+
+Requête R6 :
+  Analyser   → le délai moyen de livraison
+  En fonction de → le livreur, la zone de couverture, le mois
+  Pour → les commandes livrées et retournées
+
+Requête R7 :
+  Analyser   → le nombre de clients distincts et le CA
+  En fonction de → la ville, le canal d'acquisition
+  Pour → l'ensemble des commandes livrées
+```
+
+---
+
+## 2. Granularité de la Table de Faits
+
+### Choix : **1 ligne = 1 ligne de commande**
+
+Chaque ligne de `FAIT_VENTES` représente exactement **1 produit vendu dans 1 commande**, à une date donnée, par un client identifié, dans une région, avec un livreur.
+
+### Justification :
+- **Niveau de détail maximal** : permet de répondre à toutes les requêtes analytiques sans perte d'information
+- **Flexibilité** : les agrégations (par mois, trimestre, région, catégorie) sont calculées dynamiquement via les jointures dimensions
+- **Conformité** : correspond au grain recommandé par Kimball pour les tables de faits transactionnelles
+- **Traçabilité** : chaque vente peut être retracée jusqu'à la commande source
+
+---
+
+## 3. Classification des Mesures
+
+| Mesure | Type | Justification |
+|--------|------|---------------|
+| `quantite_vendue` | **Additive** | Peut être sommée sur toutes les dimensions (temps, produit, client, région, livreur) |
+| `montant_ht` | **Additive** | CA hors taxes — sommable partout |
+| `montant_ttc` | **Additive** | CA TTC — sommable partout |
+| `cout_livraison` | **Additive** | Coût de livraison — sommable partout |
+| `delai_livraison_jours` | **Semi-additive** | Non sommable sur le temps (on utilise la moyenne). Ex : le délai moyen d'un mois n'est pas la somme des délais |
+| `remise_pct` | **Non-additive** | Pourcentage — ne peut pas être sommé. Doit être recalculé : remise_totale / CA_total × 100 |
+
+---
+
+## 4. Gestion des Slowly Changing Dimensions (SCD)
+
+### Cas 1 — SCD Type 2 : `DIM_PRODUIT` (changement de catégorie)
+
+**Scénario** :
+> Le produit "iPhone 16 Pro" était classé dans la catégorie "Téléphones" jusqu'en mars 2024.
+> Suite à une réorganisation du catalogue, il passe dans "Smartphones" en mars 2024.
+
+**Choix : SCD Type 2** — Historisation complète
+
+**Justification** :
+- On veut que les ventes **antérieures à mars 2024** restent classées dans "Téléphones"
+- Les ventes **postérieures** sont classées dans "Smartphones"
+- Cela garantit la **cohérence historique** des analyses par catégorie
+
+**Implémentation** :
+```
+id_produit_sk | id_produit_nk | categorie    | date_debut | date_fin   | est_actif
+1             | P001          | Téléphones   | 2024-01-01 | 2024-03-14 | false
+2             | P001          | Smartphones  | 2024-03-15 | 9999-12-31 | true
+```
+
+Les colonnes SCD Type 2 sont :
+- `date_debut` : date de début de validité de la version
+- `date_fin` : date de fin (9999-12-31 = version active)
+- `est_actif` : flag booléen pour filtrer rapidement la version courante
+
+---
+
+### Cas 2 — SCD Type 1 : `DIM_CLIENT` (changement de segment)
+
+**Scénario** :
+> Un client était "Silver" au T1 2024 (CA 12 mois = 7 200 MAD).
+> Après des achats importants, il passe "Gold" au T2 2024 (CA 12 mois = 18 500 MAD).
+
+**Choix : SCD Type 1** — Mise à jour directe (écrasement)
+
+**Justification** :
+- Le segment client est une **mesure dérivée recalculée** à chaque exécution du pipeline
+- On ne souhaite **pas conserver l'historique des segments** car l'analyse porte toujours sur le segment actuel
+- Le segment reflète le comportement **récent** du client (12 derniers mois glissants)
+- L'historique des achats est déjà dans `FAIT_VENTES` — on peut recalculer le segment à n'importe quelle date
+
+**Implémentation** : Le champ `segment_client` est simplement **écrasé** lors de chaque refresh du pipeline.
+
+---
+
+## 5. Schéma en Étoile (ERD)
+
+```
+                    ┌─────────────┐
+                    │  DIM_TEMPS  │
+                    │─────────────│
+                    │ PK id_date  │
+                    │ jour        │
+                    │ mois        │
+                    │ trimestre   │
+                    │ annee       │
+                    │ est_weekend │
+                    │ est_ferie   │
+                    │ ramadan     │
+                    └──────┬──────┘
+                           │
+┌──────────────┐    ┌──────┴──────┐    ┌──────────────┐
+│ DIM_PRODUIT  │    │ FAIT_VENTES │    │  DIM_CLIENT  │
+│──────────────│    │─────────────│    │──────────────│
+│ PK id_sk     │◄───│ FK id_date  │───►│ PK id_sk     │
+│ NK id_nk     │    │ FK id_prod  │    │ NK id_nk     │
+│ nom          │    │ FK id_cli   │    │ nom_complet  │
+│ categorie    │    │ FK id_reg   │    │ tranche_age  │
+│ sous_cat     │    │ FK id_liv   │    │ sexe         │
+│ marque       │    │─────────────│    │ segment      │
+│ prix         │    │ qte_vendue  │    │ canal_acq    │
+│ fournisseur  │    │ montant_ht  │    │ (SCD Type 1) │
+│ (SCD Type 2) │    │ montant_ttc │    └──────────────┘
+└──────────────┘    │ cout_livr   │
+                    │ delai_livr  │    ┌──────────────┐
+┌──────────────┐    │ remise_pct  │    │ DIM_LIVREUR  │
+│ DIM_REGION   │    │ statut      │───►│──────────────│
+│──────────────│◄───│             │    │ PK id_livreur│
+│ PK id_region │    └─────────────┘    │ nom          │
+│ ville        │                       │ transport    │
+│ province     │                       │ zone_couv    │
+│ region_admin │                       └──────────────┘
+│ zone_geo     │
+└──────────────┘
+```
+
+---
+
+## 6. Requêtes Analytiques SQL
+
+### Q1 — CA par région avec évolution 12 mois
+```sql
+SELECT r.region_admin, t.annee, t.mois,
+       SUM(f.montant_ttc) AS ca_ttc
+FROM dwh_mexora.fait_ventes f
+JOIN dwh_mexora.dim_temps t ON f.id_date = t.id_date
+JOIN dwh_mexora.dim_region r ON f.id_region = r.id_region
+WHERE f.statut_commande = 'livré'
+GROUP BY r.region_admin, t.annee, t.mois
+ORDER BY t.annee DESC, t.mois DESC, ca_ttc DESC;
+```
+
+### Q2 — Top 10 produits à Tanger par trimestre
+```sql
+SELECT t.trimestre, p.nom_produit, p.categorie,
+       SUM(f.montant_ttc) AS ca_total
+FROM dwh_mexora.fait_ventes f
+JOIN dwh_mexora.dim_temps t ON f.id_date = t.id_date
+JOIN dwh_mexora.dim_produit p ON f.id_produit = p.id_produit_sk
+JOIN dwh_mexora.dim_region r ON f.id_region = r.id_region
+WHERE r.ville = 'Tanger' AND f.statut_commande = 'livré'
+GROUP BY t.trimestre, p.nom_produit, p.categorie
+ORDER BY ca_total DESC LIMIT 10;
+```
+
+### Q3 — Panier moyen par segment client
+```sql
+SELECT c.segment_client,
+       COUNT(DISTINCT f.id_vente) AS nb_commandes,
+       ROUND(SUM(f.montant_ttc) / COUNT(DISTINCT f.id_vente), 2) AS panier_moyen
+FROM dwh_mexora.fait_ventes f
+JOIN dwh_mexora.dim_client c ON f.id_client = c.id_client_sk
+WHERE f.statut_commande = 'livré' AND c.est_actif = TRUE
+GROUP BY c.segment_client ORDER BY panier_moyen DESC;
+```
+
+### Q4 — Taux de retour par catégorie
+```sql
+SELECT p.categorie,
+       COUNT(*) FILTER (WHERE f.statut_commande = 'retourné') AS nb_retours,
+       COUNT(*) AS nb_total,
+       ROUND(COUNT(*) FILTER (WHERE f.statut_commande = 'retourné') * 100.0
+             / NULLIF(COUNT(*), 0), 2) AS taux_retour_pct
+FROM dwh_mexora.fait_ventes f
+JOIN dwh_mexora.dim_produit p ON f.id_produit = p.id_produit_sk
+GROUP BY p.categorie ORDER BY taux_retour_pct DESC;
+```
+
+### Q5 — Effet Ramadan sur l'alimentation
+```sql
+SELECT t.periode_ramadan,
+       ROUND(AVG(f.montant_ttc), 2) AS ca_moyen_par_vente,
+       SUM(f.quantite_vendue) AS volume_total
+FROM dwh_mexora.fait_ventes f
+JOIN dwh_mexora.dim_temps t ON f.id_date = t.id_date
+JOIN dwh_mexora.dim_produit p ON f.id_produit = p.id_produit_sk
+WHERE p.categorie = 'Alimentation' AND f.statut_commande = 'livré'
+GROUP BY t.periode_ramadan;
+```
+
+---
+
+*Document de modélisation — Mexora Analytics*
