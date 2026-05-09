@@ -1,0 +1,36 @@
+id_produit_sk,id_produit_nk,nom_produit,categorie,sous_categorie,marque,fournisseur,prix_standard,origine_pays,date_debut,date_fin,est_actif
+1,P001,iPhone 16 Pro 256Go,Electronique,Smartphones,Apple,Apple MENA,12999.0,USA,2023-10-09,9999-12-31,True
+2,P002,Samsung Galaxy S24 Ultra,Electronique,Smartphones,Samsung,Samsung Maroc,11499.0,Corée du Sud,2023-04-15,9999-12-31,True
+3,P003,Xiaomi 14 Ultra,Electronique,Smartphones,Xiaomi,Xiaomi MENA,7999.0,Chine,2024-07-12,9999-12-31,True
+4,P004,OPPO Find X7,Electronique,Smartphones,OPPO,OPPO Maroc,6499.0,Chine,2023-02-02,9999-12-31,True
+5,P005,Google Pixel 8 Pro,Electronique,Smartphones,Google,Google EMEA,9999.0,USA,2023-08-27,9999-12-31,True
+6,P006,MacBook Air M3,Electronique,Laptops,Apple,Apple MENA,14999.0,USA,2024-07-28,9999-12-31,True
+7,P007,Dell XPS 15,Electronique,Laptops,Dell,Dell Maroc,13499.0,USA,2024-07-12,9999-12-31,True
+8,P008,Lenovo ThinkPad X1,Electronique,Laptops,Lenovo,Lenovo MENA,12999.0,Chine,2023-10-12,9999-12-31,True
+9,P009,HP Spectre x360,Electronique,Laptops,HP,HP Maroc,11999.0,USA,2023-06-13,9999-12-31,True
+10,P010,ASUS ZenBook 14,Electronique,Laptops,ASUS,ASUS MENA,8999.0,Taïwan,2023-10-12,9999-12-31,True
+11,P011,AirPods Pro 2,Electronique,Accessoires,Apple,Apple MENA,2999.0,USA,2023-12-11,9999-12-31,True
+12,P012,Samsung Galaxy Buds3,Electronique,Accessoires,Samsung,Samsung Maroc,1499.0,Corée du Sud,2023-04-10,9999-12-31,True
+13,P013,Logitech MX Master 3S,Electronique,Accessoires,Logitech,Logitech EMEA,899.0,Suisse,2023-09-28,9999-12-31,True
+14,P014,Anker PowerBank 20000mAh,Electronique,Accessoires,Anker,Anker MENA,399.0,Chine,2024-07-03,9999-12-31,True
+15,P015,iPad Air M2,Electronique,Tablettes,Apple,Apple MENA,8999.0,USA,2024-01-23,9999-12-31,True
+16,P016,Samsung Galaxy Tab S9,Electronique,Tablettes,Samsung,Samsung Maroc,7499.0,Corée du Sud,2024-01-06,9999-12-31,True
+17,P017,Polo Ralph Lauren Classic,Mode,Vêtements Homme,Ralph Lauren,Fashion Import MA,899.0,USA,2023-03-13,9999-12-31,True
+18,P018,Jean Levi's 501 Original,Mode,Vêtements Homme,Levi's,Levi's Maroc,799.0,USA,2023-10-24,9999-12-31,True
+19,P019,T-shirt Nike Dri-FIT,Mode,Vêtements Homme,Nike,Nike Maroc,349.0,Vietnam,2023-04-14,9999-12-31,True
+20,P020,Chemise Zara Slim Fit,Mode,Vêtements Homme,Zara,Inditex Maroc,449.0,Espagne,2024-01-09,9999-12-31,True
+21,P021,Robe Mango Midi,Mode,Vêtements Femme,Mango,Mango Maroc,599.0,Espagne,2023-08-03,9999-12-31,True
+22,P022,Sac Michael Kors Jet Set,Mode,Vêtements Femme,Michael Kors,Fashion Import MA,2499.0,USA,2023-03-15,9999-12-31,True
+23,P023,Abaya Moderne Brodée,Mode,Vêtements Femme,Caftan House,Artisan Maroc,1299.0,Maroc,2024-06-30,9999-12-31,True
+24,P024,Nike Air Max 90,Mode,Chaussures,Nike,Nike Maroc,1299.0,Vietnam,2024-04-18,9999-12-31,True
+25,P025,Adidas Stan Smith,Mode,Chaussures,Adidas,Adidas Maroc,999.0,Vietnam,2024-07-24,9999-12-31,True
+26,P026,Babouche Artisanale Fès,Mode,Chaussures,Artisan Fès,Artisan Maroc,299.0,Maroc,2023-02-27,9999-12-31,True
+27,P027,Huile d'Argan Bio 500ml,Alimentation,Épicerie Fine,Argan du Souss,Coopérative Souss,249.0,Maroc,2023-11-20,9999-12-31,True
+28,P028,Miel de Thym Atlas 1kg,Alimentation,Épicerie Fine,Atlas Miel,Coopérative Atlas,399.0,Maroc,2023-08-05,9999-12-31,True
+29,P029,Safran de Taliouine 5g,Alimentation,Épicerie Fine,Safran Taliouine,Coopérative Taliouine,199.0,Maroc,2023-11-19,9999-12-31,True
+30,P030,Dattes Mejhoul Premium 1kg,Alimentation,Épicerie Fine,Oasis Errachidia,Coopérative Draa,149.0,Maroc,2024-02-10,9999-12-31,True
+31,P031,Thé Vert Gunpowder 500g,Alimentation,Boissons,Sultan Tea,Sultan Import,89.0,Chine,2023-09-29,9999-12-31,True
+32,P032,Café Moulu Arabica 250g,Alimentation,Boissons,Café Najjar,Café Najjar MENA,79.0,Brésil,2024-07-28,9999-12-31,True
+33,P033,Cornes de Gazelle 500g,Alimentation,Pâtisserie,Pâtisserie Bennis,Pâtisserie Bennis,129.0,Maroc,2024-08-21,9999-12-31,True
+34,P034,Chebakia Traditionnelle 1kg,Alimentation,Pâtisserie,Pâtisserie Atlas,Pâtisserie Atlas,169.0,Maroc,2024-02-13,9999-12-31,True
+35,P035,Ghriba aux Amandes 500g,Alimentation,Pâtisserie,Pâtisserie Fès,Pâtisserie Fès,119.0,Maroc,2023-05-22,9999-12-31,True

@@ -1,0 +1,27 @@
+id_region,ville,province,region_admin,zone_geo,pays
+1,Tanger,Tanger-Assilah,Tanger-Tétouan-Al Hoceïma,Nord,Maroc
+2,Tétouan,Tétouan,Tanger-Tétouan-Al Hoceïma,Nord,Maroc
+3,Al Hoceïma,Al Hoceïma,Tanger-Tétouan-Al Hoceïma,Nord,Maroc
+4,Casablanca,Casablanca,Casablanca-Settat,Centre,Maroc
+5,Mohammedia,Mohammedia,Casablanca-Settat,Centre,Maroc
+6,Settat,Settat,Casablanca-Settat,Centre,Maroc
+7,Rabat,Rabat,Rabat-Salé-Kénitra,Centre,Maroc
+8,Salé,Salé,Rabat-Salé-Kénitra,Centre,Maroc
+9,Kénitra,Kénitra,Rabat-Salé-Kénitra,Centre,Maroc
+10,Marrakech,Marrakech,Marrakech-Safi,Sud,Maroc
+11,Safi,Safi,Marrakech-Safi,Sud,Maroc
+12,Essaouira,Essaouira,Marrakech-Safi,Sud,Maroc
+13,Fès,Fès,Fès-Meknès,Centre,Maroc
+14,Meknès,Meknès,Fès-Meknès,Centre,Maroc
+15,Agadir,Agadir-Ida Ou Tanane,Souss-Massa,Sud,Maroc
+16,Oujda,Oujda-Angad,Oriental,Est,Maroc
+17,Nador,Nador,Oriental,Est,Maroc
+18,El Jadida,El Jadida,Casablanca-Settat,Centre,Maroc
+19,Béni Mellal,Béni Mellal,Béni Mellal-Khénifra,Centre,Maroc
+20,Taza,Taza,Fès-Meknès,Centre,Maroc
+21,Khouribga,Khouribga,Béni Mellal-Khénifra,Centre,Maroc
+22,Laâyoune,Laâyoune,Laâyoune-Sakia El Hamra,Sud,Maroc
+23,Dakhla,Oued Ed-Dahab,Dakhla-Oued Ed-Dahab,Sud,Maroc
+24,Guelmim,Guelmim,Guelmim-Oued Noun,Sud,Maroc
+25,Errachidia,Errachidia,Drâa-Tafilalet,Sud,Maroc
+26,Taroudant,Taroudant,Souss-Massa,Sud,Maroc

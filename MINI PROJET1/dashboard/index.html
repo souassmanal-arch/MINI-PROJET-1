@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mexora Analytics — Dashboard BI interactif pour le Data Warehouse e-commerce Maroc">
+    <title>Mexora Analytics — Dashboard BI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">M</div>
+            <span class="logo-text">Mexora Analytics</span>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-btn active" data-page="overview" id="nav-overview">
+                <span class="nav-icon">📊</span><span class="nav-label">Vue d'ensemble</span>
+            </button>
+            <button class="nav-btn" data-page="revenue" id="nav-revenue">
+                <span class="nav-icon">💰</span><span class="nav-label">Évolution CA</span>
+            </button>
+            <button class="nav-btn" data-page="products" id="nav-products">
+                <span class="nav-icon">🏆</span><span class="nav-label">Top Produits</span>
+            </button>
+            <button class="nav-btn" data-page="segments" id="nav-segments">
+                <span class="nav-icon">👥</span><span class="nav-label">Segments Clients</span>
+            </button>
+            <button class="nav-btn" data-page="returns" id="nav-returns">
+                <span class="nav-icon">🔄</span><span class="nav-label">Taux de Retour</span>
+            </button>
+            <button class="nav-btn" data-page="ramadan" id="nav-ramadan">
+                <span class="nav-icon">🌙</span><span class="nav-label">Effet Ramadan</span>
+            </button>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-info">Pipeline ETL v1.0</div>
+            <div class="sidebar-info">Data Warehouse PostgreSQL</div>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+        <!-- HEADER -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menu-toggle">☰</button>
+                <h1 id="page-title">Vue d'ensemble</h1>
+            </div>
+            <div class="header-right">
+                <div class="filter-group">
+                    <label for="filter-year">Année</label>
+                    <select id="filter-year">
+                        <option value="2026" selected>2026</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-quarter">Trimestre</label>
+                    <select id="filter-quarter">
+                        <option value="all" selected>Tous</option>
+                        <option value="1">T1</option>
+                        <option value="2">T2</option>
+                        <option value="3">T3</option>
+                        <option value="4">T4</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-city">Ville</label>
+                    <select id="filter-city">
+                        <option value="all" selected>Toutes</option>
+                        <option value="Tanger">Tanger</option>
+                        <option value="Casablanca">Casablanca</option>
+                        <option value="Rabat">Rabat</option>
+                        <option value="Marrakech">Marrakech</option>
+                        <option value="Fès">Fès</option>
+                        <option value="Agadir">Agadir</option>
+                    </select>
+                </div>
+                <span class="last-update">Dernière MAJ: <span id="last-update-time"></span></span>
+            </div>
+        </header>
+
+        <!-- PAGE: Overview -->
+        <section class="page active" id="page-overview">
+            <div class="kpi-row">
+                <div class="kpi-card" id="kpi-ca">
+                    <div class="kpi-icon">💰</div>
+                    <div class="kpi-body">
+                        <span class="kpi-label">CA Total TTC</span>
+                        <span class="kpi-value" id="kpi-ca-value">—</span>
+                        <span class="kpi-change positive" id="kpi-ca-change">—</span>
+                    </div>
+                </div>
+                <div class="kpi-card" id="kpi-orders">
+                    <div class="kpi-icon">📦</div>
+                    <div class="kpi-body">
+                        <span class="kpi-label">Commandes</span>
+                        <span class="kpi-value" id="kpi-orders-value">—</span>
+                        <span class="kpi-change positive" id="kpi-orders-change">—</span>
+                    </div>
+                </div>
+                <div class="kpi-card" id="kpi-basket">
+                    <div class="kpi-icon">🛒</div>
+                    <div class="kpi-body">
+                        <span class="kpi-label">Panier Moyen</span>
+                        <span class="kpi-value" id="kpi-basket-value">—</span>
+                        <span class="kpi-change" id="kpi-basket-change">—</span>
+                    </div>
+                </div>
+                <div class="kpi-card" id="kpi-clients">
+                    <div class="kpi-icon">👥</div>
+                    <div class="kpi-body">
+                        <span class="kpi-label">Clients Actifs</span>
+                        <span class="kpi-value" id="kpi-clients-value">—</span>
+                        <span class="kpi-change positive" id="kpi-clients-change">—</span>
+                    </div>
+                </div>
+            </div>
+            <div class="charts-grid">
+                <div class="chart-card wide">
+                    <div class="chart-header">
+                        <h3>Évolution mensuelle du CA (MAD)</h3>
+                    </div>
+                    <canvas id="chart-overview-ca"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header"><h3>Répartition par Catégorie</h3></div>
+                    <canvas id="chart-overview-cat"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header"><h3>CA par Région</h3></div>
+                    <canvas id="chart-overview-region"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: Revenue -->
+        <section class="page" id="page-revenue">
+            <div class="kpi-row">
+                <div class="kpi-card"><div class="kpi-icon">📈</div><div class="kpi-body"><span class="kpi-label">CA Mois Actuel</span><span class="kpi-value" id="rev-current">—</span></div></div>
+                <div class="kpi-card"><div class="kpi-icon">📉</div><div class="kpi-body"><span class="kpi-label">CA Mois Précédent</span><span class="kpi-value" id="rev-previous">—</span></div></div>
+                <div class="kpi-card"><div class="kpi-icon">📊</div><div class="kpi-body"><span class="kpi-label">Évolution</span><span class="kpi-value" id="rev-evolution">—</span></div></div>
+                <div class="kpi-card"><div class="kpi-icon">🏆</div><div class="kpi-body"><span class="kpi-label">Top Région</span><span class="kpi-value" id="rev-top-region">—</span></div></div>
+            </div>
+            <div class="charts-grid">
+                <div class="chart-card wide">
+                    <div class="chart-header"><h3>CA Mensuel — Comparaison N / N-1</h3></div>
+                    <canvas id="chart-revenue-compare"></canvas>
+                </div>
+                <div class="chart-card wide">
+                    <div class="chart-header"><h3>CA par Région (Top 10)</h3></div>
+                    <canvas id="chart-revenue-region"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: Products -->
+        <section class="page" id="page-products">
+            <div class="charts-grid">
+                <div class="chart-card wide">
+                    <div class="chart-header"><h3>Top 10 Produits par CA (Tanger)</h3></div>
+                    <canvas id="chart-top-products"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header"><h3>CA par Catégorie</h3></div>
+                    <canvas id="chart-cat-breakdown"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header"><h3>CA par Marque (Top 8)</h3></div>
+                    <canvas id="chart-brand-breakdown"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: Segments -->
+        <section class="page" id="page-segments">
+            <div class="kpi-row">
+                <div class="kpi-card gold"><div class="kpi-icon">🥇</div><div class="kpi-body"><span class="kpi-label">Gold — Panier Moyen</span><span class="kpi-value" id="seg-gold">—</span></div></div>
+                <div class="kpi-card silver"><div class="kpi-icon">🥈</div><div class="kpi-body"><span class="kpi-label">Silver — Panier Moyen</span><span class="kpi-value" id="seg-silver">—</span></div></div>
+                <div class="kpi-card bronze"><div class="kpi-icon">🥉</div><div class="kpi-body"><span class="kpi-label">Bronze — Panier Moyen</span><span class="kpi-value" id="seg-bronze">—</span></div></div>
+            </div>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header"><h3>Répartition CA par Segment</h3></div>
+                    <canvas id="chart-seg-donut"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header"><h3>Nombre de commandes par Segment</h3></div>
+                    <canvas id="chart-seg-orders"></canvas>
+                </div>
+                <div class="chart-card wide">
+                    <div class="chart-header"><h3>Détail par Segment Client</h3></div>
+                    <div class="table-container">
+                        <table class="data-table" id="table-segments">
+                            <thead>
+                                <tr><th>Segment</th><th>Nb Clients</th><th>Nb Commandes</th><th>CA Total (MAD)</th><th>Panier Moyen</th><th>% du CA</th></tr>
+                            </thead>
+                            <tbody id="table-segments-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: Returns -->
+        <section class="page" id="page-returns">
+            <div class="charts-grid">
+                <div class="chart-card wide">
+                    <div class="chart-header">
+                        <h3>Taux de Retour par Catégorie</h3>
+                        <div class="legend-inline">
+                            <span class="legend-dot green"></span> &lt; 3%
+                            <span class="legend-dot orange"></span> 3-5%
+                            <span class="legend-dot red"></span> &gt; 5%
+                        </div>
+                    </div>
+                    <canvas id="chart-returns"></canvas>
+                </div>
+                <div class="chart-card wide">
+                    <div class="chart-header"><h3>Évolution du Taux de Retour Mensuel</h3></div>
+                    <canvas id="chart-returns-trend"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: Ramadan -->
+        <section class="page" id="page-ramadan">
+            <div class="kpi-row">
+                <div class="kpi-card ramadan"><div class="kpi-icon">🌙</div><div class="kpi-body"><span class="kpi-label">CA Ramadan (Alimentation)</span><span class="kpi-value" id="ram-ca">—</span></div></div>
+                <div class="kpi-card"><div class="kpi-icon">📅</div><div class="kpi-body"><span class="kpi-label">CA Hors Ramadan (Alim.)</span><span class="kpi-value" id="ram-ca-hors">—</span></div></div>
+                <div class="kpi-card"><div class="kpi-icon">📈</div><div class="kpi-body"><span class="kpi-label">Indice de Performance</span><span class="kpi-value" id="ram-index">—</span></div></div>
+            </div>
+            <div class="charts-grid">
+                <div class="chart-card wide">
+                    <div class="chart-header"><h3>Ventes Alimentation — Zones Ramadan surlignées</h3></div>
+                    <canvas id="chart-ramadan-trend"></canvas>
+                </div>
+                <div class="chart-card wide">
+                    <div class="chart-header"><h3>Comparaison Ramadan vs Hors Ramadan par Catégorie</h3></div>
+                    <canvas id="chart-ramadan-compare"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

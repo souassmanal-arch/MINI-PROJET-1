@@ -1,0 +1,27 @@
+code_ville,nom_ville_standard,province,region_admin,zone_geo,population,code_postal
+TNG,Tanger,Tanger-Assilah,Tanger-Tétouan-Al Hoceïma,Nord,1065601,90000
+TET,Tétouan,Tétouan,Tanger-Tétouan-Al Hoceïma,Nord,380787,93000
+AHC,Al Hoceïma,Al Hoceïma,Tanger-Tétouan-Al Hoceïma,Nord,395644,32000
+CAS,Casablanca,Casablanca,Casablanca-Settat,Centre,3359818,20000
+MOH,Mohammedia,Mohammedia,Casablanca-Settat,Centre,208612,20800
+SET,Settat,Settat,Casablanca-Settat,Centre,142250,26000
+RBT,Rabat,Rabat,Rabat-Salé-Kénitra,Centre,577827,10000
+SLE,Salé,Salé,Rabat-Salé-Kénitra,Centre,890403,11000
+KNT,Kénitra,Kénitra,Rabat-Salé-Kénitra,Centre,431282,14000
+MRK,Marrakech,Marrakech,Marrakech-Safi,Sud,928850,40000
+SFI,Safi,Safi,Marrakech-Safi,Sud,308508,46000
+ESS,Essaouira,Essaouira,Marrakech-Safi,Sud,77966,44000
+FES,Fès,Fès,Fès-Meknès,Centre,1150131,30000
+MKN,Meknès,Meknès,Fès-Meknès,Centre,632079,50000
+AGD,Agadir,Agadir-Ida Ou Tanane,Souss-Massa,Sud,421844,80000
+OJD,Oujda,Oujda-Angad,Oriental,Est,494252,60000
+NDR,Nador,Nador,Oriental,Est,161726,62000
+EJD,El Jadida,El Jadida,Casablanca-Settat,Centre,194934,24000
+BML,Béni Mellal,Béni Mellal,Béni Mellal-Khénifra,Centre,192676,23000
+TZA,Taza,Taza,Fès-Meknès,Centre,148456,35000
+KHB,Khouribga,Khouribga,Béni Mellal-Khénifra,Centre,196196,25000
+LAY,Laâyoune,Laâyoune,Laâyoune-Sakia El Hamra,Sud,217732,70000
+DKL,Dakhla,Oued Ed-Dahab,Dakhla-Oued Ed-Dahab,Sud,106277,73000
+GLM,Guelmim,Guelmim,Guelmim-Oued Noun,Sud,118318,81000
+ERC,Errachidia,Errachidia,Drâa-Tafilalet,Sud,92374,52000
+TRD,Taroudant,Taroudant,Souss-Massa,Sud,80149,83000

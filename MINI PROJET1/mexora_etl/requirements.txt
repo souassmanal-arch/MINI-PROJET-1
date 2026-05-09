@@ -1,0 +1,21 @@
+# ============================================================
+# Mexora Analytics — Dépendances Python
+# Pipeline ETL & Data Warehouse
+# ============================================================
+
+# Manipulation de données
+pandas==2.2.2
+numpy==1.26.4
+
+# Connexion PostgreSQL
+sqlalchemy==2.0.30
+psycopg2-binary==2.9.9
+
+# Génération de données
+faker==25.0.1
+
+# Logging (inclus dans stdlib, listée pour référence)
+# logging — standard library
+
+# Utilitaires
+python-dateutil==2.9.0
