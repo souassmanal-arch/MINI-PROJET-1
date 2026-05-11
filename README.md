@@ -199,6 +199,6 @@ Le dashboard interactif répond aux **5 questions métier** :
 
 ## 👤 Auteur
 
-Projet réalisé dans le cadre du miniprojet Data Engineering & Business Intelligence PAR MANAL SOUASS ET RAHIMA GHARBIL .
+Projet réalisé dans le cadre du miniprojet Data Engineering & Business Intelligence par manal souass et rahima gharbil .
 ----
 2025-2026
