@@ -55,10 +55,7 @@ MINI PROJET1/
 │   ├── index.html                  # Dashboard BI interactif
 │   ├── style.css                   # Design premium dark mode
 │   └── app.js                      # Graphiques Chart.js
-├── docs/
-│   ├── modelisation.md             # Modélisation DWH détaillée
-│   └── rapport_transformations.md  # Rapport des transformations ETL
-└── README.md                       # Ce fichier
+
 ```
 
 ---
