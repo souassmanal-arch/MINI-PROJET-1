@@ -139,7 +139,7 @@ Ouvrir `fancy-hummingbird-62722e.netlify.app ` dans un navigateur
 | `DIM_REGION` | `id_region` | ville, province, région admin, zone géo |
 | `DIM_LIVREUR` | `id_livreur` | type transport, zone couverture |
 
-OUVRIR WIKI POUR PLUS DÉTAILLE
+OUVRIR LE PDF DE MODÉLISATION 
 ### Gestion des SCD
 - **SCD Type 2** sur `DIM_PRODUIT` : historisation des changements de catégorie/prix
 - **SCD Type 1** sur `DIM_CLIENT` : mise à jour directe du segment client
